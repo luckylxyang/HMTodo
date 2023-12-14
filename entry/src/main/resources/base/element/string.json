@@ -10,7 +10,27 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "Todo 清单"
+    },
+    {
+      "name": "login",
+      "value": "登录"
+    },
+    {
+      "name": "logOut",
+      "value": "退出登录"
+    },
+    {
+      "name": "register",
+      "value": "注册"
+    },
+    {
+      "name": "login_placeholder",
+      "value": "请输入登录名"
+    },
+    {
+      "name": "password_placeholder",
+      "value": "请输入密码"
     }
   ]
 }

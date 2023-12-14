@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\huawei\\.ohos\\config\\auto_debug_HMTodo_com.lxy.todo_70086000220455074.cer",
+          "storePassword": "0000001B0877486348EACB9FA7E08262C95DFE4465DD74972A7999485C6CF37574229FC151D97E97D09EA3",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B308F8E088F2382FEC2D07931C0B7A7F51771E28FAEFDA98F03B23BC9A797DBFF8D3ED6C75D017D",
+          "profile": "C:\\Users\\huawei\\.ohos\\config\\auto_debug_HMTodo_com.lxy.todo_70086000220455074.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\huawei\\.ohos\\config\\auto_debug_HMTodo_com.lxy.todo_70086000220455074.p12"
+        }
+      }
+    ],
     "compileSdkVersion": 9,
     "compatibleSdkVersion": 9,
     "products": [
