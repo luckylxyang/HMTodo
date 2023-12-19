@@ -31,6 +31,10 @@
     {
       "name": "password_placeholder",
       "value": "请输入密码"
+    },
+    {
+      "name": "reason",
+      "value": "访问网络"
     }
   ]
 }

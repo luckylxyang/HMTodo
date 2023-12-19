@@ -99,7 +99,7 @@ export default struct LoginPage {
     // + `?username=${this.loginName}&password=pass`
     httpPost(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`, {}, data => {
       promptAction.showToast({ message: "登录成功" })
-      router.replaceUrl({ url: "pages/main/MainPage" })
+      router.pushUrl({ url: "pages/main/MainPage" })
       this.saveCookie(data)
     }, error => {
       promptAction.showToast({ message: error })

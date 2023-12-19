@@ -2,6 +2,7 @@
   "src": [
     "pages/Index",
     "pages/login/LoginPage",
-    "pages/main/MainPage"
+    "pages/main/MainPage",
+    "pages/detail/DetailPage"
   ]
 }

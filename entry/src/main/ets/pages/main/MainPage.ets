@@ -1,4 +1,7 @@
 
+import router from '@ohos.router';
+import PreferencesUtil from '../utils/PreferencesUtil';
+import ListPage from './ListPage';
 @Entry
 @Component
 export default struct MainPage{
@@ -6,41 +9,50 @@ export default struct MainPage{
   private arr: number[] = [1, 2, 3];
 
   build() {
-    Column() {
-      Navigation() {
-        TextInput({ placeholder: 'search...' })
-          .width("90%")
-          .height(40)
-          .backgroundColor('#FFFFFF')
+    Stack({ alignContent: Alignment.Bottom }){
+      Column() {
+        Row(){
+          Text("待办")
+            .fontSize(32)
+            .margin({ top:24, left: 24 })
 
-        List({ space: 12 }) {
-          ForEach(this.arr, (item) => {
-            ListItem() {
-              NavRouter() {
-                Text("NavRouter" + item)
-                  .width("100%")
-                  .height(72)
-                  .backgroundColor('#FFFFFF')
-                  .borderRadius(24)
-                  .fontSize(16)
-                  .fontWeight(500)
-                  .textAlign(TextAlign.Center)
-                NavDestination() {
-                  Text("NavDestinationContent" + item)
-                }
-                .title("NavDestinationTitle" + item)
-              }
-            }
-          }, item => item)
-        }
-        .width("90%")
-        .margin({ top: 12 })
+        }.justifyContent(FlexAlign.Start)
+        .width('100%')
+        TextInput({ placeholder: 'search...' })
+          .margin(12)
+          .height(45)
+
+        ListPage()
       }
-      .title("主标题")
-      .mode(NavigationMode.Split)
-    }
-    .height('100%')
+      .height('100%')
+      .width('100%')
+      .backgroundColor('#F1F3F5')
+
+      Image($r('app.media.add'))
+        .width(42)
+        .height(42)
+        .padding(6)
+        .margin({bottom: 50})
+        .clip(new Circle({ width: 42, height: 42 }))
+        .backgroundColor($r('app.color.blue'))
+        .shadow({ radius: 5 })
+        .onClick(ev=>{
+          this.goToAddPage()
+        })
+
+    }.height('100%')
     .width('100%')
-    .backgroundColor('#F1F3F5')
+  }
+
+  goToAddPage(){
+    if(this.checkIsLogin()){
+      router.pushUrl({url: 'pages/detail/DetailPage'})
+    } else {
+      router.pushUrl({url: 'pages/login/LoginPage'})
+    }
+  }
+
+   checkIsLogin(){
+    return AppStorage.SetAndProp("login", false).get()
   }
 }
