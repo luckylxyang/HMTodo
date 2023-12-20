@@ -1,5 +1,6 @@
 
 import router from '@ohos.router';
+import PermissionUtil from '../utils/PermissionUtil';
 import PreferencesUtil from '../utils/PreferencesUtil';
 import ListPage from './ListPage';
 import TodoDialog from './TodoDialog';
@@ -19,6 +20,19 @@ export default struct MainPage{
     alignment: DialogAlignment.Bottom,
     offset: {dx: 0, dy: -20}
   })
+
+
+  aboutToAppear(){
+    PermissionUtil.checkPermissions('ohos.permission.WRITE_CALENDAR')
+      .then(value=>{
+
+      }).catch(ex=>{
+      PermissionUtil.reqPermissionsFromUser(['ohos.permission.WRITE_CALENDAR'])
+        .then(value=>{
+
+        })
+    })
+  }
 
   build() {
     Stack({ alignContent: Alignment.Bottom }){

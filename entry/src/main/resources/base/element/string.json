@@ -37,6 +37,10 @@
       "value": "访问网络"
     },
     {
+      "name": "cal_reason",
+      "value": "日历"
+    },
+    {
       "name": "finish",
       "value": "完成"
     },

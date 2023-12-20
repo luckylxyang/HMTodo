@@ -11,7 +11,6 @@ const PermissionUtil = {
    */
   checkAccessToken(permission: Permissions): Promise<abilityAccessCtrl.GrantStatus> {
     let atManager = abilityAccessCtrl.createAtManager();
-    let grantStatus: abilityAccessCtrl.GrantStatus;
 
     // 获取应用程序的accessTokenID
     return new Promise((resolve, reject) => {

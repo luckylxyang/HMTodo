@@ -37,6 +37,10 @@
       {
         "name": "ohos.permission.INTERNET",
         "reason": '$string:reason'
+      },
+      {
+        "name": "ohos.permission.WRITE_CALENDAR",
+        "reason": '$string:cal_reason'
       }
     ]
   }

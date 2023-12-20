@@ -91,4 +91,5 @@ export default struct ListPage {
         this.todoList.splice(index, 1);
       })
   }
+
 }
