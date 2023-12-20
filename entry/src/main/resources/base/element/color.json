@@ -9,8 +9,16 @@
       "value": "#FFA7A4A4"
     },
     {
+      "name": "bg_gray",
+      "value": "#FFDBD9D9"
+    },
+    {
       "name": "blue",
       "value": "#317aff"
+    },
+    {
+      "name": "orange",
+      "value": "#FFE2BE52"
     }
   ]
 }

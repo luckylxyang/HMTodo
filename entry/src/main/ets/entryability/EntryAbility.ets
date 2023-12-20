@@ -26,6 +26,7 @@ export default class EntryAbility extends UIAbility {
     PreferencesUtil.getInstance().get("cookie")
       .then((data)=>{
         console.info("success")
+        AppStorage.SetOrCreate("login", true)
         AppStorage.SetOrCreate("cookie", data)
       }).catch(err=>{
       console.error(err)

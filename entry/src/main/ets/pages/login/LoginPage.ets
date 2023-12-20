@@ -9,19 +9,19 @@ import PreferencesUtil from '../utils/PreferencesUtil';
 @Component
 @Preview
 export default struct LoginPage {
-  @State loginName: string = ""
-  @State password: string = ""
+  @State loginName: string = "请你喝娃哈哈"
+  @State password: string = "lxy123456"
   @State clickable: boolean = false
   @State btnOpacity: number = 0.4
 
   aboutToAppear(){
-    PreferencesUtil.getInstance().get("password")
+    PreferencesUtil.getInstance().get("password", this.loginName)
       .then((data)=>{
         this.password = <string>data
       }).catch(err=>{
       console.error(err)
     })
-    PreferencesUtil.getInstance().get("loginName")
+    PreferencesUtil.getInstance().get("loginName", this.password)
       .then((data)=>{
         this.loginName = <string>data
       }).catch(err=>{
@@ -99,7 +99,7 @@ export default struct LoginPage {
     // + `?username=${this.loginName}&password=pass`
     httpPost(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`, {}, data => {
       promptAction.showToast({ message: "登录成功" })
-      router.pushUrl({ url: "pages/main/MainPage" })
+      router.replaceUrl({ url: "pages/main/MainPage" })
       this.saveCookie(data)
     }, error => {
       promptAction.showToast({ message: error })

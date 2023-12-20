@@ -35,6 +35,14 @@
     {
       "name": "reason",
       "value": "访问网络"
+    },
+    {
+      "name": "finish",
+      "value": "完成"
+    },
+    {
+      "name": "set_reminder",
+      "value": "设置提醒"
     }
   ]
 }

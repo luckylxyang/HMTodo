@@ -2,11 +2,23 @@
 import router from '@ohos.router';
 import PreferencesUtil from '../utils/PreferencesUtil';
 import ListPage from './ListPage';
+import TodoDialog from './TodoDialog';
+
+@Preview
 @Entry
 @Component
 export default struct MainPage{
 
-  private arr: number[] = [1, 2, 3];
+  @State refresh : boolean = false
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: TodoDialog({
+      confirm: ()=>{
+        this.refresh = true
+      }
+    }),
+    alignment: DialogAlignment.Bottom,
+    offset: {dx: 0, dy: -20}
+  })
 
   build() {
     Stack({ alignContent: Alignment.Bottom }){
@@ -22,7 +34,7 @@ export default struct MainPage{
           .margin(12)
           .height(45)
 
-        ListPage()
+        ListPage({refresh : this.refresh}).width('100%')
       }
       .height('100%')
       .width('100%')
@@ -46,7 +58,7 @@ export default struct MainPage{
 
   goToAddPage(){
     if(this.checkIsLogin()){
-      router.pushUrl({url: 'pages/detail/DetailPage'})
+      this.dialogController.open()
     } else {
       router.pushUrl({url: 'pages/login/LoginPage'})
     }
