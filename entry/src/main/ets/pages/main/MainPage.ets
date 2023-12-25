@@ -23,15 +23,25 @@ export default struct MainPage{
 
 
   aboutToAppear(){
+    // ohos.permission.PUBLISH_AGENT_REMINDER
     PermissionUtil.checkPermissions('ohos.permission.WRITE_CALENDAR')
       .then(value=>{
 
       }).catch(ex=>{
       PermissionUtil.reqPermissionsFromUser(['ohos.permission.WRITE_CALENDAR'])
         .then(value=>{
-
+          if (!value[0]) {
+            PermissionUtil.openPermissionsInSystemSettings()
+          }
         })
     })
+  }
+
+  /**
+   * 将待办事项写入日历
+   */
+  writeTodoInCalendar(){
+
   }
 
   build() {

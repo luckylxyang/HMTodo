@@ -2,6 +2,8 @@ import promptAction from '@ohos.promptAction'
 import TodoItem from '../entity/TodoItem'
 import { dateFormat } from '../utils/CommonUtils'
 import { httpPost, httpPostFormPromise, httpPostPromise } from '../utils/HttpUtil'
+import PermissionUtil from '../utils/PermissionUtil'
+import Reminder from '../utils/ReminderAgentUtil'
 
 @Preview
 @CustomDialog
@@ -75,6 +77,7 @@ export default struct TodoDialog {
             .onClick(ev => {
               this.timeReminder = ""
               this.selectTime = new Date()
+
             })
         }
         .justifyContent(FlexAlign.Center)
@@ -112,6 +115,7 @@ export default struct TodoDialog {
       .then(data => {
         this.confirm()
         this.controller.close()
+        this.writeAlert()
       })
   }
 
@@ -122,6 +126,15 @@ export default struct TodoDialog {
         promptAction.showToast({ message: '更新成功' })
         this.confirm()
         this.controller.close()
+        this.writeAlert()
       })
+  }
+
+  openCanAlert(){
+
+  }
+
+  writeAlert(){
+    Reminder.reminder(this.selectTime)
   }
 }

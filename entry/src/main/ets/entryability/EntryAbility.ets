@@ -17,20 +17,24 @@ export default class EntryAbility extends UIAbility {
       GlobalContext.getContext().setObject('preferences', preferences);
       console.info('Succeeded in getting preferences.');
       // 进行相关数据操作
+      // preferences.get("cookie", "")
+      //   .then((data)=>{
+      //     console.info("success", data)
+      //     AppStorage.SetOrCreate("login", true)
+      //     AppStorage.SetOrCreate("cookie", data)
+      //   }).catch(err=>{
+      //   console.error(err)
+      // })
     })
     eventWatch()
-    this.initData()
+    // this.initData()
   }
 
-  initData(){
-    PreferencesUtil.getInstance().get("cookie")
-      .then((data)=>{
-        console.info("success")
-        AppStorage.SetOrCreate("login", true)
-        AppStorage.SetOrCreate("cookie", data)
-      }).catch(err=>{
-      console.error(err)
-    })
+  initData = async () => {
+    let data = await PreferencesUtil.getInstance().get("cookie")
+    console.info("success", data)
+    AppStorage.SetOrCreate("login", true)
+    AppStorage.SetOrCreate("cookie", data)
   }
 
   onDestroy() {

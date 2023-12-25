@@ -40,6 +40,10 @@
       },
       {
         "name": "ohos.permission.WRITE_CALENDAR",
+        "reason": '$string:cal_reason',
+      },
+      {
+        "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
         "reason": '$string:cal_reason'
       }
     ]

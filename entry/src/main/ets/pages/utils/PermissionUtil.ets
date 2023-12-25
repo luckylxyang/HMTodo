@@ -18,6 +18,7 @@ const PermissionUtil = {
         .then(bundleInfo => {
           let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
           let tokenId = appInfo.accessTokenId;
+          console.log("token: " + tokenId);
 
           // 校验应用是否被授予权限
           atManager.checkAccessToken(tokenId, permission)
@@ -87,6 +88,21 @@ const PermissionUtil = {
       }).catch((err) => {
         resolve(err)
       })
+    })
+  },
+
+  openPermissionsInSystemSettings(): void {
+    let context = getContext(this) as common.UIAbilityContext;
+    let wantInfo = {
+      action: 'action.settings.app.info',
+      parameters: {
+        settingsParamBundleName: 'com.lxy.todo' // 打开指定应用的详情页面
+      }
+    }
+    context.startAbility(wantInfo).then(() => {
+      // ...
+    }).catch((err) => {
+      // ...
     })
   }
 }
