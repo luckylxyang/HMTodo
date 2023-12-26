@@ -3,6 +3,7 @@ import Page from '../entity/Page'
 import Resource from '../entity/Resource'
 import TodoItem from '../entity/TodoItem'
 import { httpGet, httpGetEntity, httpPostPromise } from '../utils/HttpUtil'
+import { get,  } from '../http/HttpUtils'
 import TodoDialog from './TodoDialog'
 
 @Preview
@@ -38,15 +39,24 @@ export default struct ListPage {
   getData() {
 
     let url = `lg/todo/v2/list/${this.pageIndex}/json`
-    httpGetEntity<Page<TodoItem>>(url, (data: Page<TodoItem>) => {
+
+    get<Page<TodoItem>>(url).then((data: Page<TodoItem>) => {
       if (this.pageIndex == 1) {
         this.todoList = data.datas
         return
       }
       this.todoList.push(...data.datas)
-    }, error => {
-
     })
+
+    // httpGetEntity<Page<TodoItem>>(url, (data: Page<TodoItem>) => {
+    //   if (this.pageIndex == 1) {
+    //     this.todoList = data.datas
+    //     return
+    //   }
+    //   this.todoList.push(...data.datas)
+    // }, error => {
+    //
+    // })
   }
 
   @Builder itemEnd(index: number) {

@@ -1,34 +1,34 @@
+import http from '@ohos.net.http'
+import HttpClient from './HttpClient'
 import Interceptor from './Interceptor'
-import {httpGet, httpPost} from './RealHttp'
 
-export default class Builder {
+export default class HttpBuilder {
   baseUrl: string
-  connectTimeOut: number
-  writeTimeOut: number
-  readTimeout: number
+  connectTimeOut: number = 60000
+  writeTimeOut: number = 120000
+  readTimeout: number = 60000
+  usingProtocol: http.HttpProtocol = http.HttpProtocol.HTTP1_1
+  header: object
 
-  requestInterceptor: Interceptor[]
-  responseInterceptor: Interceptor[]
+  private requestInterceptor: Interceptor[]
+  private responseInterceptor: Interceptor[]
 
-  interceptors : Interceptor[]
+  private interceptors : Interceptor[]
+
+  constructor(data: Partial<HttpBuilder>) {
+    Object.assign(this, data);
+  }
 
   addInterceptor(interceptor : Interceptor){
     this.interceptors.push(interceptor)
   }
 
-  build() : Builder{
-    return new Builder()
+  build() : HttpClient{
+    return new HttpClient(this)
   }
 
-  get(url :string){
-    return httpGet(this.get(url))
-  }
 
-  getUrl(url : string){
-    if (url.startsWith("http")) {
-      return url
-    }
-    return this.baseUrl + url
-  }
+
+
 
 }

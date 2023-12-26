@@ -1,9 +1,11 @@
 import { httpPost } from '../utils/HttpUtil'
 import { Api } from '../net/ApiConstants'
 import Toolbar from '../Component/Toolbar'
+import User from '../entity/User'
 import promptAction from '@ohos.promptAction'
 import router from '@ohos.router'
 import PreferencesUtil from '../utils/PreferencesUtil';
+import { post,  } from '../http/HttpUtils'
 
 @Entry
 @Component
@@ -15,13 +17,13 @@ export default struct LoginPage {
   @State btnOpacity: number = 0.4
 
   aboutToAppear(){
-    PreferencesUtil.getInstance().get("password", this.loginName)
+    PreferencesUtil.getInstance().get("password", this.password)
       .then((data)=>{
         this.password = <string>data
       }).catch(err=>{
       console.error(err)
     })
-    PreferencesUtil.getInstance().get("loginName", this.password)
+    PreferencesUtil.getInstance().get("loginName", this.loginName)
       .then((data)=>{
         this.loginName = <string>data
       }).catch(err=>{
@@ -97,13 +99,19 @@ export default struct LoginPage {
       password: this.password
     }
     // + `?username=${this.loginName}&password=pass`
-    httpPost(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`, {}, data => {
-      promptAction.showToast({ message: "登录成功" })
-      router.replaceUrl({ url: "pages/main/MainPage" })
-      this.saveCookie(data)
-    }, error => {
-      promptAction.showToast({ message: error })
-    })
+    post<User>(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`)
+      .then(data => {
+        promptAction.showToast({ message: "登录成功" })
+        router.replaceUrl({ url: "pages/main/MainPage" })
+        this.saveCookie(data)
+      })
+    // httpPost(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`, {}, data => {
+    //   promptAction.showToast({ message: "登录成功" })
+    //   router.replaceUrl({ url: "pages/main/MainPage" })
+    //   this.saveCookie(data)
+    // }, error => {
+    //   promptAction.showToast({ message: error })
+    // })
   }
 
   saveCookie(data) {
