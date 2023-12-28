@@ -10,6 +10,7 @@ import TodoDialog from './TodoDialog'
 @Component
 export default struct ListPage {
 
+  @State isRefreshing: boolean = false
   @Prop  @Watch('refreshPage')refresh : boolean
   @State todoList: Array<TodoItem> = []
   @State selectItem : TodoItem = null
@@ -71,24 +72,37 @@ export default struct ListPage {
 
   build() {
     Column() {
-      List({space : 20}) {
-        ForEach(this.todoList, (item: TodoItem, index) => {
-          ListItem() {
-            Row() {
-              Checkbox()
-                .select(item.status == 1)
-                .margin({ right: 8 })
 
-              Text(item.title)
-            }.width('100%')
-          }.onClick(ev=>{
-            this.selectItem = this.todoList[index]
-            this.dialogController.open()
-          }).swipeAction({ end: this.itemEnd.bind(this, index)})
-        })
-      }.width('100%')
-      .height('100%')
-      .padding({ left: 12, right: 12 })
+      Refresh({ refreshing: $$this.isRefreshing, offset: 120, friction: 100 }) {
+        List({space : 20}) {
+          ForEach(this.todoList, (item: TodoItem, index) => {
+            ListItem() {
+              Row() {
+                Checkbox()
+                  .select(item.status == 1)
+                  .margin({ right: 8 })
+
+                Text(item.title)
+              }.width('100%')
+            }.onClick(ev=>{
+              this.selectItem = this.todoList[index]
+              this.dialogController.open()
+            }).swipeAction({ end: this.itemEnd.bind(this, index)})
+          })
+        }.width('100%')
+        .height('100%')
+        .padding({ left: 12, right: 12 })
+      }
+      .onStateChange((refreshStatus: RefreshStatus) => {
+        console.info('Refresh onStatueChange state is ' + refreshStatus)
+      })
+      .onRefreshing(() => {
+        setTimeout(() => {
+          this.isRefreshing = false
+        }, 1000)
+        console.log('onRefreshing test')
+      })
+
 
     }.width('100%')
   }

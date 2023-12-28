@@ -1,55 +1,60 @@
 // 引入包名
 import http from '@ohos.net.http';
+import { HttpRequest, HttpResponse } from './Http';
 import HttpBuilder from './HttpBuilder';
 
 
-export function get<T>(url, build? : HttpBuilder): Promise<T> {
+export function get<T>(url, build?: HttpBuilder): Promise<T> {
   return request<T>(url, http.RequestMethod.GET, build)
 }
 
-export function post<T>(url, params, build? : HttpBuilder): Promise<T> {
+export function post<T>(url, params, build?: HttpBuilder): Promise<T> {
   return request<T>(url, http.RequestMethod.POST, params, build)
 }
 
-export function request<T>(url, method : http.RequestMethod, params?, build? : HttpBuilder): Promise<T> {
-  let httpRequest = http.createHttp();
-  httpRequest.on('headersReceive', (header) => {
+async function request<T>(url, method: http.RequestMethod, params?, build?: HttpBuilder): Promise<T> {
+  let httpClient = http.createHttp();
+  httpClient.on('headersReceive', (header) => {
     console.info('header: ' + JSON.stringify(header));
   });
-  return new Promise<T>((resolve, reject) => {
-    httpRequest.request(
-      url,
-      {
-        method: method,
-        header: {
-          'Content-Type': 'application/json',
-        },
-        extraData: params,
-        expectDataType: http.HttpDataType.OBJECT,
-        usingCache: true,
-        connectTimeout: build?.connectTimeOut,
-        readTimeout: build?.readTimeout,
-        usingProtocol: build?.usingProtocol,
-      }, (err, data) => {
-      try {
-        console.info('Url:' + url);
-        if (!err) {
-          console.info('Result:' + JSON.stringify(data.result));
-          console.info('code:' + JSON.stringify(data.responseCode));
-          console.info('header:' + JSON.stringify(data.header));
-          console.info('cookies:' + JSON.stringify(data.cookies)); // 8+
 
-          let result = data.result as T;
-          resolve(result);
-        } else {
-          console.info('error:' + JSON.stringify(err));
-          reject(err);
-        }
-      } finally {
-        httpRequest.off('headersReceive');
-        httpRequest.destroy();
-      }
-    });
+  let request = new HttpRequest({
+    url: url,
+    method: method,
+    headers: build?.headers,
+    body: params
+  })
+
+  for (let item of build.requestInterceptor) {
+    request = await item.onRequest(request)
+  }
+
+  let data = await   httpClient.request(url, {
+    method: method,
+    header: request.headers,
+    extraData: request.body,
+    expectDataType: http.HttpDataType.OBJECT,
+    usingCache: true,
+    connectTimeout: build?.connectTimeOut,
+    readTimeout: build?.readTimeout,
+    usingProtocol: build?.usingProtocol,
+  })
+  let httpResponse = new HttpResponse({
+    url: url,
+    cookies: data.cookies,
+    resultType: data.resultType,
+    responseCode: data.responseCode,
+    header: data.header,
+  })
+
+  for (let item of build.responseInterceptor) {
+    httpResponse = await item.onResponse(httpResponse)
+  }
+
+  let result = httpResponse.result as T;
+
+  return new Promise<T>((resolve, reject) => {
+    resolve(result);
   })
 
 }

@@ -1,14 +1,19 @@
 
 import HttpBuilder from './HttpBuilder'
 import Resource from '../entity/Resource'
+import { SaveCacheInterceptor } from './SaveCacheInterceptor';
+import HeaderInterceptor from './HeaderInterceptor';
 
 let builder = new HttpBuilder({
   baseUrl : 'https://www.wanandroid.com/',
   connectTimeOut: 12000,
   readTimeout: 12000,
-  header:{
+  headers:{
     'Content-Type': 'application/json',
-  }
+  },
+  responseInterceptor: [new SaveCacheInterceptor()],
+  requestInterceptor: [new HeaderInterceptor()]
+
 })
 
 

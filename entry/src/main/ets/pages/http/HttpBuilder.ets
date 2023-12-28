@@ -1,6 +1,6 @@
 import http from '@ohos.net.http'
 import HttpClient from './HttpClient'
-import Interceptor from './Interceptor'
+import { RequestInterceptor,ResponseInterceptor } from './Interceptor'
 
 export default class HttpBuilder {
   baseUrl: string
@@ -8,27 +8,27 @@ export default class HttpBuilder {
   writeTimeOut: number = 120000
   readTimeout: number = 60000
   usingProtocol: http.HttpProtocol = http.HttpProtocol.HTTP1_1
-  header: object
-
-  private requestInterceptor: Interceptor[]
-  private responseInterceptor: Interceptor[]
-
-  private interceptors : Interceptor[]
+  headers: object
+  tempUrl: string
+  requestInterceptor: RequestInterceptor[]
+  responseInterceptor: ResponseInterceptor[]
 
   constructor(data: Partial<HttpBuilder>) {
     Object.assign(this, data);
   }
 
-  addInterceptor(interceptor : Interceptor){
-    this.interceptors.push(interceptor)
+
+  setRequestInterceptor(interceptor : RequestInterceptor){
+    this.requestInterceptor.push(interceptor)
+    return this
   }
 
-  build() : HttpClient{
+  setResponseInterceptor(interceptor : ResponseInterceptor){
+    this.responseInterceptor.push(interceptor)
+    return this
+  }
+
+  build(): HttpClient {
     return new HttpClient(this)
   }
-
-
-
-
-
 }

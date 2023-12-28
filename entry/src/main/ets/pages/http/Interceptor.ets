@@ -1,14 +1,17 @@
 import http from '@ohos.net.http';
+import HttpBuilder from './HttpBuilder';
+import { HttpRequest, HttpResponse } from './Http';
 
 export interface Chain{
-  request(): http.HttpRequest
+  request(): HttpRequest
 
-  proceed(request: http.HttpRequest): http.HttpResponse;
+  proceed(request: HttpRequest): http.HttpResponse;
 }
 
-export default interface Interceptor {
+export interface RequestInterceptor {
+  onRequest(options: HttpRequest): HttpRequest | Promise<HttpRequest>;
+}
 
-  intercept(chain: Chain) : http.HttpResponse;
-
-
+export interface ResponseInterceptor {
+  onResponse(response: HttpResponse): HttpResponse | Promise<HttpResponse>;
 }
