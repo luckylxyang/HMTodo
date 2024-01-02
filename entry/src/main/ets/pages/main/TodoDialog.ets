@@ -110,14 +110,7 @@ export default struct TodoDialog {
     if (!this.todoItem.content){
       this.todoItem.content = ""
     }
-    // httpPostFormPromise(`lg/todo/add/json`,
-    //   `title=${encodeURIComponent(this.todoItem.title)}&content=${encodeURIComponent(this.todoItem.content)}&date=${dateFormat('YYYY-MM-DD',this.selectTime)}`
-    // )
-    //   .then(data => {
-    //     this.confirm()
-    //     this.controller.close()
-    //     this.writeAlert()
-    //   })
+
     postForm(`lg/todo/add/json`,
       `title=${encodeURIComponent(this.todoItem.title)}&content=${encodeURIComponent(this.todoItem.content)}&date=${dateFormat('YYYY-MM-DD',this.selectTime)}`
     ).then(data => {

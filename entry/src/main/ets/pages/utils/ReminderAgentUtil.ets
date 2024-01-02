@@ -51,9 +51,9 @@ const Reminder = {
     let targetReminderAgent: reminderAgentManager.ReminderRequestCalendar = {
       reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_CALENDAR, // 提醒类型为日历类型
       dateTime: { // 指明提醒的目标时间
-        year: 2023,
-        month: 12,
-        day: 25,
+        year: reminderDate.getFullYear(),
+        month: reminderDate.getMonth() + 1,
+        day: reminderDate.getDay(),
         hour: 16,
         minute: 11,
         second: 0

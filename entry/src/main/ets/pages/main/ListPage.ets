@@ -5,6 +5,7 @@ import TodoItem from '../entity/TodoItem'
 import { httpGet, httpGetEntity, httpPostPromise } from '../utils/HttpUtil'
 import { get, post,  } from '../http/HttpUtils'
 import TodoDialog from './TodoDialog'
+import CommonDialog from '../utils/CommonDialog'
 
 @Preview
 @Component
@@ -61,7 +62,15 @@ export default struct ListPage {
       .width(26)
       .height(26)
     .onClick(() => {
-      this.deleteTodo(index)
+      CommonDialog.openDoubleDialog("提示", "确认删除该项？", "确认", "取消")
+        .then(data=>{
+
+          this.deleteTodo(index)
+        })
+        .catch(err=>{
+          promptAction.showToast({message: err})
+        })
+
     })
   }
 
