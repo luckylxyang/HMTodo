@@ -13,6 +13,7 @@ export function post<T>(url, params, build?: HttpBuilder): Promise<T> {
 }
 
 async function request<T>(url, method: http.RequestMethod, params?, build?: HttpBuilder): Promise<T> {
+
   let httpClient = http.createHttp();
   httpClient.on('headersReceive', (header) => {
     console.info('header: ' + JSON.stringify(header));
@@ -29,7 +30,7 @@ async function request<T>(url, method: http.RequestMethod, params?, build?: Http
     request = await item.onRequest(request)
   }
 
-  let data = await   httpClient.request(url, {
+  let data = await httpClient.request(url, {
     method: method,
     header: request.headers,
     extraData: request.body,
@@ -45,6 +46,7 @@ async function request<T>(url, method: http.RequestMethod, params?, build?: Http
     resultType: data.resultType,
     responseCode: data.responseCode,
     header: data.header,
+    result: data.result
   })
 
   for (let item of build.responseInterceptor) {
@@ -53,9 +55,7 @@ async function request<T>(url, method: http.RequestMethod, params?, build?: Http
 
   let result = httpResponse.result as T;
 
-  return new Promise<T>((resolve, reject) => {
-    resolve(result);
-  })
+  return result
 
 }
 

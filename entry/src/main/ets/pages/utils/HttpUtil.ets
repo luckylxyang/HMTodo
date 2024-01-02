@@ -65,7 +65,7 @@ export function httpGet(url, success, error?) {
     console.info('header: ' + JSON.stringify(header));
   });
   let cookie = ""
-  PreferencesUtil.getInstance().get("cookie")
+  PreferencesUtil.get("cookie")
     .then(data => {
       cookie = <string> data
     })
@@ -116,7 +116,7 @@ export function httpGet(url, success, error?) {
 
 export function httpPost(url: string, params, success, error?) {
   // let cookie = ""
-  // PreferencesUtil.getInstance().get("cookie")
+  // PreferencesUtil.get("cookie")
   //   .then(data => {
   //     cookie = <string> data
   //   })
@@ -280,13 +280,13 @@ function saveCookie(cookies) {
   let cookie = parseCookieString(cookies);
   AppStorage.SetOrCreate("login", true)
   AppStorage.SetOrCreate("cookie", cookie)
-  PreferencesUtil.getInstance().put("cookie", cookie)
+  PreferencesUtil.put("cookie", cookie)
     .then(() => {
       console.info("save cookie success")
     }).catch(err => {
     console.error(err)
   })
-  PreferencesUtil.getInstance().flush()
+  PreferencesUtil.flush()
 
 
   console.log(cookie);

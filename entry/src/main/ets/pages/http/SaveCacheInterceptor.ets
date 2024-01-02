@@ -19,15 +19,12 @@ export class SaveCacheInterceptor implements ResponseInterceptor {
     let cookie = this.parseCookieString(cookies);
     AppStorage.SetOrCreate("login", true)
     AppStorage.SetOrCreate("cookie", cookie)
-    PreferencesUtil.getInstance().put("cookie", cookie)
+    PreferencesUtil.put("cookie", cookie)
       .then(() => {
         console.info("save cookie success")
       }).catch(err => {
       console.error(err)
     })
-    PreferencesUtil.getInstance().flush()
-
-
     console.log(cookie);
   }
 

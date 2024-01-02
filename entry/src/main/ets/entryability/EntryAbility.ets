@@ -4,38 +4,30 @@ import window from '@ohos.window';
 import dataPreferences from '@ohos.data.preferences';
 import GlobalContext from '../pages/utils/GlobalContext';
 import { eventWatch} from './EventUtil'
-import PreferencesUtil from '../pages/utils/PreferencesUtil';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want, launchParam) {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
-    dataPreferences.getPreferences(this.context, 'wan_android', (err, preferences) => {
-      if (err) {
-        console.error(`Failed to get preferences. Code:${err.code},message:${err.message}`);
-        return;
-      }
-      GlobalContext.getContext().setObject('preferences', preferences);
-      console.info('Succeeded in getting preferences.');
-      // 进行相关数据操作
-      // preferences.get("cookie", "")
-      //   .then((data)=>{
-      //     console.info("success", data)
-      //     AppStorage.SetOrCreate("login", true)
-      //     AppStorage.SetOrCreate("cookie", data)
-      //   }).catch(err=>{
-      //   console.error(err)
-      // })
-    })
+    // dataPreferences.getPreferences(this.context, 'wan_android', (err, preferences) => {
+    //   if (err) {
+    //     console.error(`Failed to get preferences. Code:${err.code},message:${err.message}`);
+    //     return;
+    //   }
+    //   GlobalContext.getContext().setObject('preferences', preferences);
+    //   console.info('Succeeded in getting preferences.');
+    //   // 进行相关数据操作
+    //   // preferences.get("cookie", "")
+    //   //   .then((data)=>{
+    //   //     console.info("success", data)
+    //   //     AppStorage.SetOrCreate("login", true)
+    //   //     AppStorage.SetOrCreate("cookie", data)
+    //   //   }).catch(err=>{
+    //   //   console.error(err)
+    //   // })
+    // })
     eventWatch()
-    // this.initData()
   }
 
-  initData = async () => {
-    let data = await PreferencesUtil.getInstance().get("cookie")
-    console.info("success", data)
-    AppStorage.SetOrCreate("login", true)
-    AppStorage.SetOrCreate("cookie", data)
-  }
 
   onDestroy() {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');

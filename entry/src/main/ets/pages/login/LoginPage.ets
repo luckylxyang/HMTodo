@@ -17,13 +17,13 @@ export default struct LoginPage {
   @State btnOpacity: number = 0.4
 
   aboutToAppear(){
-    PreferencesUtil.getInstance().get("password", this.password)
+    PreferencesUtil.get("password")
       .then((data)=>{
         this.password = <string>data
       }).catch(err=>{
       console.error(err)
     })
-    PreferencesUtil.getInstance().get("loginName", this.loginName)
+    PreferencesUtil.get("loginName")
       .then((data)=>{
         this.loginName = <string>data
       }).catch(err=>{
@@ -94,48 +94,30 @@ export default struct LoginPage {
   }
 
   login() {
-    let par = {
-      username: this.loginName,
-      password: this.password
-    }
-    // + `?username=${this.loginName}&password=pass`
     post<User>(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`)
       .then(data => {
         promptAction.showToast({ message: "登录成功" })
         router.replaceUrl({ url: "pages/main/MainPage" })
         this.saveCookie(data)
       })
-    // httpPost(Api.user.login + `?username=${encodeURIComponent(this.loginName)}&password=${this.password}`, {}, data => {
-    //   promptAction.showToast({ message: "登录成功" })
-    //   router.replaceUrl({ url: "pages/main/MainPage" })
-    //   this.saveCookie(data)
-    // }, error => {
-    //   promptAction.showToast({ message: error })
-    // })
   }
 
   saveCookie(data) {
 
-    PreferencesUtil.getInstance().put("user", JSON.stringify(data))
+    PreferencesUtil.put("user", JSON.stringify(data))
       .then(()=>{
         console.info("success")
       }).catch(err=>{
         console.error(err)
     })
 
-    PreferencesUtil.getInstance().put("loginName", this.loginName)
+    PreferencesUtil.put("loginName", this.loginName)
       .then(()=>{
         console.info("success")
       }).catch(err=>{
         console.error(err)
     })
-    PreferencesUtil.getInstance().put("password", this.password)
-      .then(()=>{
-        console.info("success")
-      }).catch(err=>{
-        console.error(err)
-    })
-    PreferencesUtil.getInstance().flush()
+    PreferencesUtil.put("password", this.password)
       .then(()=>{
         console.info("success")
       }).catch(err=>{

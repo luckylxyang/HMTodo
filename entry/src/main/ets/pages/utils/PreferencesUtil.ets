@@ -1,57 +1,43 @@
 import data_preferences from '@ohos.data.preferences';
-import GlobalContext from './GlobalContext';
 
 const PREFERENCES_NAME = 'wan_android'; // 首选项名字
 
 let preference = null
-export default class PreferencesUtil {
-  private static instance: PreferencesUtil | null = null;
+let context = getContext(this)
+class PreferencesUtil {
 
-  private constructor() {
-    // 私有构造函数，防止外部直接实例化
-    preference = GlobalContext.getContext()
-      .getObject("preferences")
-  }
-
-  static getInstance(): PreferencesUtil {
-    // 提供获取实例的静态方法
-    if (!PreferencesUtil.instance) {
-      PreferencesUtil.instance = new PreferencesUtil();
+  async getPreferencesFromStorage(){
+    try {
+      preference = await data_preferences.getPreferences(context, PREFERENCES_NAME);
+    } catch (err) {
+      console.error(`Failed to get preferences. Code:${err.code},message:${err.message}`);
     }
-    return PreferencesUtil.instance;
   }
 
-  get(key, defaultValue?) {
-    return new Promise((resolve, reject) => {
-      preference.get(key, defaultValue ? defaultValue : "").then(value => {
-        resolve(value)
-      }).catch(err => {
-        reject(err)
-      })
-    })
+  async get(key, defaultValue?) {
+    if (!preference) {
+      await this.getPreferencesFromStorage();
+    }
+    return preference.get(key, defaultValue ? defaultValue : "")
   }
 
-  put(key, value) {
-    return new Promise<void>((resolve, reject) => {
-      preference.put(key, value).then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
+  async put(key, value) {
+    if (!preference) {
+      await this.getPreferencesFromStorage();
+    }
+    await preference.put(key, value)
+    return this.flush()
   }
 
-  has( key) {
-    return new Promise((resolve, reject) => {
-      preference.has(key).then(result => {
-        resolve(result)
-      }).catch(err => {
-        reject(err)
-      })
-    })
+  async has( key) {
+    if (!preference) {
+      await this.getPreferencesFromStorage();
+    }
+    return preference.has(key)
+
   }
 
-  deleteKey(key) {
+  async deleteKey(key) {
     return new Promise<void>((resolve, reject) => {
       preference.delete(key).then(() => {
         resolve()
@@ -61,14 +47,13 @@ export default class PreferencesUtil {
     })
   }
 
-  flush() {
-    return new Promise<void>((resolve, reject) => {
-      preference.flush().then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
+  async flush() {
+    if (!preference) {
+      await this.getPreferencesFromStorage();
+    }
+    return preference.flush()
   }
 }
+
+export default new PreferencesUtil()
 
