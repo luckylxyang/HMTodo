@@ -9,7 +9,8 @@ export default class HeaderInterceptor implements RequestInterceptor {
     let data = await PreferencesUtil.get("cookie", "")
     hilog.info(0x2233, "http_inter", <string>data)
     options.headers = {
-      'Cookies': <string>data
+      'Cookie': <string>data,
+      ...options.headers
     }
     return options
   }

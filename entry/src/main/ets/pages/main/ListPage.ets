@@ -3,7 +3,7 @@ import Page from '../entity/Page'
 import Resource from '../entity/Resource'
 import TodoItem from '../entity/TodoItem'
 import { httpGet, httpGetEntity, httpPostPromise } from '../utils/HttpUtil'
-import { get,  } from '../http/HttpUtils'
+import { get, post,  } from '../http/HttpUtils'
 import TodoDialog from './TodoDialog'
 
 @Preview
@@ -41,23 +41,18 @@ export default struct ListPage {
 
     let url = `lg/todo/v2/list/${this.pageIndex}/json`
 
+    console.info("getData")
     get<Page<TodoItem>>(url).then((data: Page<TodoItem>) => {
+      this.isRefreshing = false
       if (this.pageIndex == 1) {
         this.todoList = data.datas
         return
       }
       this.todoList.push(...data.datas)
+    }).catch(err=>{
+      promptAction.showToast({message: err})
     })
 
-    // httpGetEntity<Page<TodoItem>>(url, (data: Page<TodoItem>) => {
-    //   if (this.pageIndex == 1) {
-    //     this.todoList = data.datas
-    //     return
-    //   }
-    //   this.todoList.push(...data.datas)
-    // }, error => {
-    //
-    // })
   }
 
   @Builder itemEnd(index: number) {
@@ -97,10 +92,7 @@ export default struct ListPage {
         console.info('Refresh onStatueChange state is ' + refreshStatus)
       })
       .onRefreshing(() => {
-        setTimeout(() => {
-          this.isRefreshing = false
-        }, 1000)
-        console.log('onRefreshing test')
+        this.getData()
       })
 
 
@@ -109,7 +101,7 @@ export default struct ListPage {
 
   deleteTodo(index){
 
-    httpPostPromise(`lg/todo/delete/${this.todoList[index].id}/json`, {})
+    post(`lg/todo/delete/${this.todoList[index].id}/json`, {})
       .then(data=>{
         promptAction.showToast({ message : "删除成功" })
         this.todoList.splice(index, 1);

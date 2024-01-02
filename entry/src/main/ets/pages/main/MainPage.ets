@@ -84,7 +84,7 @@ export default struct MainPage{
     if(this.checkIsLogin()){
       this.dialogController.open()
     } else {
-      router.pushUrl({url: 'pages/login/LoginPage'})
+      router.replaceUrl({url: 'pages/login/LoginPage'})
     }
   }
 

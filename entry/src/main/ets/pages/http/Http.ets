@@ -30,6 +30,8 @@ export class HttpResponse {
 
   cookies: string;
 
+  body: string | Object | ArrayBuffer;
+
 
   constructor(data: Partial<HttpResponse>) {
     Object.assign(this, data);

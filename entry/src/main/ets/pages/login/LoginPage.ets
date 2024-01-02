@@ -17,13 +17,13 @@ export default struct LoginPage {
   @State btnOpacity: number = 0.4
 
   aboutToAppear(){
-    PreferencesUtil.get("password")
+    PreferencesUtil.get("password", this.password)
       .then((data)=>{
         this.password = <string>data
       }).catch(err=>{
       console.error(err)
     })
-    PreferencesUtil.get("loginName")
+    PreferencesUtil.get("loginName", this.loginName)
       .then((data)=>{
         this.loginName = <string>data
       }).catch(err=>{

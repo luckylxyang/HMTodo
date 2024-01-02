@@ -5,7 +5,7 @@ import HttpBuilder from './HttpBuilder';
 
 
 export function get<T>(url, build?: HttpBuilder): Promise<T> {
-  return request<T>(url, http.RequestMethod.GET, build)
+  return request<T>(url, http.RequestMethod.GET,{}, build)
 }
 
 export function post<T>(url, params, build?: HttpBuilder): Promise<T> {
@@ -46,7 +46,8 @@ async function request<T>(url, method: http.RequestMethod, params?, build?: Http
     resultType: data.resultType,
     responseCode: data.responseCode,
     header: data.header,
-    result: data.result
+    result: data.result,
+    body: request.body
   })
 
   for (let item of build.responseInterceptor) {

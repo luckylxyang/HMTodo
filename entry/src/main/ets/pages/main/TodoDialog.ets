@@ -1,5 +1,6 @@
 import promptAction from '@ohos.promptAction'
 import TodoItem from '../entity/TodoItem'
+import { post, postForm } from '../http/HttpUtils'
 import { dateFormat } from '../utils/CommonUtils'
 import { httpPost, httpPostFormPromise, httpPostPromise } from '../utils/HttpUtil'
 import PermissionUtil from '../utils/PermissionUtil'
@@ -109,18 +110,27 @@ export default struct TodoDialog {
     if (!this.todoItem.content){
       this.todoItem.content = ""
     }
-    httpPostFormPromise(`lg/todo/add/json`,
+    // httpPostFormPromise(`lg/todo/add/json`,
+    //   `title=${encodeURIComponent(this.todoItem.title)}&content=${encodeURIComponent(this.todoItem.content)}&date=${dateFormat('YYYY-MM-DD',this.selectTime)}`
+    // )
+    //   .then(data => {
+    //     this.confirm()
+    //     this.controller.close()
+    //     this.writeAlert()
+    //   })
+    postForm(`lg/todo/add/json`,
       `title=${encodeURIComponent(this.todoItem.title)}&content=${encodeURIComponent(this.todoItem.content)}&date=${dateFormat('YYYY-MM-DD',this.selectTime)}`
-    )
-      .then(data => {
-        this.confirm()
-        this.controller.close()
-        this.writeAlert()
-      })
+    ).then(data => {
+      this.confirm()
+      this.controller.close()
+      this.writeAlert()
+    }).catch(err=>{
+      promptAction.showToast(err)
+    })
   }
 
   updateTodo() {
-    httpPostFormPromise(`lg/todo/update/${this.todoItem.id}/json`,
+    postForm(`lg/todo/update/${this.todoItem.id}/json`,
       `title=${encodeURIComponent(this.todoItem.title)}&content=${encodeURIComponent(this.todoItem.content)}&date=${dateFormat('YYYY-MM-DD',this.selectTime)}`)
       .then(data => {
         promptAction.showToast({ message: '更新成功' })
