@@ -1,7 +1,7 @@
 import promptAction from '@ohos.promptAction'
 import Page from '../entity/Page'
 import TodoItem from '../entity/TodoItem'
-import { get, post, } from '../http/HttpUtils'
+import { get, post, postForm, } from '../http/HttpUtils'
 import TodoDialog from './TodoDialog'
 import CommonDialog from '../utils/CommonDialog'
 
@@ -37,10 +37,11 @@ export default struct ListPage {
 
   getData() {
 
-    let url = `lg/todo/v2/list/${this.pageIndex}/json`
+    let url = `lg/todo/v2/list/${this.pageIndex}/json?orderby=1`
 
     console.info("getData")
     get<Page<TodoItem>>(url).then((data: Page<TodoItem>) => {
+      AppStorage.SetOrCreate("login", true)
       this.isRefreshing = false
       if (this.pageIndex == 1) {
         this.todoList = data.datas
@@ -61,15 +62,7 @@ export default struct ListPage {
       .onClick(() => {
         CommonDialog.openDoubleDialog("提示", "确认删除该项？", { text: "确认", onClick: () => {
           this.deleteTodo(index)
-        } }, { text: "取消", onClick:()=>{} })
-        // .then(data=>{
-        //
-        //   this.deleteTodo(index)
-        // })
-        // .catch(err=>{
-        //   promptAction.showToast({message: err})
-        // })
-
+        } }, { text: "取消",})
       })
   }
 
@@ -84,8 +77,14 @@ export default struct ListPage {
                 Checkbox()
                   .select(item.status == 1)
                   .margin({ right: 8 })
+                  .onChange(value=>{
+                    this.updateTodoState(item)
+                  })
 
                 Text(item.title)
+                  .decoration({
+                    type: item.status == 1 ? TextDecorationType.LineThrough : TextDecorationType.None,
+                  })
               }.width('100%')
             }.onClick(ev => {
               this.selectItem = this.todoList[index]
@@ -112,6 +111,13 @@ export default struct ListPage {
       .then(data => {
         promptAction.showToast({ message: "删除成功" })
         this.todoList.splice(index, 1);
+      })
+  }
+
+  updateTodoState(item : TodoItem){
+    postForm(`lg/todo/done/${item.id}/json`, `status=${item.status === 0? 1 : 0}`)
+      .then(data => {
+        this.getData()
       })
   }
 }

@@ -10,7 +10,7 @@ let service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   // 对请求数据做点什么
-  PreferencesUtil.getInstance().get("cookie")
+  PreferencesUtil.get("cookie")
     .then(data => {
       config.headers.set("Cookie", <string> data)
       return config;
