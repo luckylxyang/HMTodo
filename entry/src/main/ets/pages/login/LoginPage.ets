@@ -1,4 +1,3 @@
-import { httpPost } from '../utils/HttpUtil'
 import { Api } from '../net/ApiConstants'
 import Toolbar from '../Component/Toolbar'
 import User from '../entity/User'

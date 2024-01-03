@@ -1,37 +1,42 @@
-
 import promptAction from '@ohos.promptAction';
+
 const dialog = {
 
-  openDialog(title, message, buttons){
-    return promptAction.showDialog({
+  openDialog(title, message, buttons) {
+    promptAction.showDialog({
       title: title,
       message: message,
       buttons: buttons,
-    }).then(data=>{
+    }).then(data => {
       console.info('showDialog success, click button: ' + data.index);
+      buttons[data.index].onClick()
+
     })
   },
 
-  openSingleDialog(title, message, posButtonName){
-    return this.openDialog(title, message,
-       [
+  openSingleDialog(title, message, positiveButtonConfig) {
+    this.openDialog(title, message,
+      [
         {
-          text: posButtonName,
-          color: '#000000',
+          text: positiveButtonConfig.text,
+          color: positiveButtonConfig.color ? positiveButtonConfig.color: '#000000',
+          onClick: positiveButtonConfig.onClick ? positiveButtonConfig.onClick : ()=>{}
         }
       ]);
   },
 
-  openDoubleDialog(title, message, posButtonName, natButtonName){
-    return this.openDialog(title, message,
+  openDoubleDialog(title: string, message: string, positiveButtonConfig: any, negativeButtonConfig: any) {
+    this.openDialog(title, message,
       [
         {
-          text: natButtonName,
-          color: '#000000',
+          text: positiveButtonConfig.text,
+          color: positiveButtonConfig.color ? positiveButtonConfig.color: '#000000',
+          onClick: positiveButtonConfig.onClick ? positiveButtonConfig.onClick : ()=>{}
         },
         {
-          text: posButtonName,
-          color: '#000000',
+          text: negativeButtonConfig.text,
+          color: negativeButtonConfig.color ? negativeButtonConfig.color: '#000000',
+          onClick: negativeButtonConfig.onClick ? negativeButtonConfig.onClick : ()=>{}
         }
       ]);
 

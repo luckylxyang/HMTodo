@@ -54,10 +54,7 @@ async function request<T>(url, method: http.RequestMethod, params?, build?: Http
     httpResponse = await item.onResponse(httpResponse)
   }
 
-  let result = httpResponse.result as T;
-
-  return result
-
+  return httpResponse.result as T;
 }
 
 

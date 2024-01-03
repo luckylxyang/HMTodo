@@ -1,37 +1,34 @@
 import promptAction from '@ohos.promptAction'
 import Page from '../entity/Page'
-import Resource from '../entity/Resource'
 import TodoItem from '../entity/TodoItem'
-import { httpGet, httpGetEntity, httpPostPromise } from '../utils/HttpUtil'
-import { get, post,  } from '../http/HttpUtils'
+import { get, post, } from '../http/HttpUtils'
 import TodoDialog from './TodoDialog'
 import CommonDialog from '../utils/CommonDialog'
 
 @Preview
 @Component
 export default struct ListPage {
-
   @State isRefreshing: boolean = false
-  @Prop  @Watch('refreshPage')refresh : boolean
+  @Prop @Watch('refreshPage') refresh: boolean
   @State todoList: Array<TodoItem> = []
-  @State selectItem : TodoItem = null
+  @State selectItem: TodoItem = null
   private pageIndex = 1
   dialogController: CustomDialogController = new CustomDialogController({
     builder: TodoDialog({
       todoItem: this.selectItem,
-      confirm: ()=>{
+      confirm: () => {
         this.getData()
       }
     }),
     alignment: DialogAlignment.Bottom,
-    offset: {dx: 0, dy: -20}
+    offset: { dx: 0, dy: -20 }
   })
 
   aboutToAppear() {
     this.getData()
   }
 
-  refreshPage(){
+  refreshPage() {
     if (!this.refresh) {
       return
     }
@@ -50,8 +47,8 @@ export default struct ListPage {
         return
       }
       this.todoList.push(...data.datas)
-    }).catch(err=>{
-      promptAction.showToast({message: err})
+    }).catch(err => {
+      promptAction.showToast({ message: err })
     })
 
   }
@@ -61,24 +58,26 @@ export default struct ListPage {
     Image($r('app.media.ic_delete'))
       .width(26)
       .height(26)
-    .onClick(() => {
-      CommonDialog.openDoubleDialog("提示", "确认删除该项？", "确认", "取消")
-        .then(data=>{
-
+      .onClick(() => {
+        CommonDialog.openDoubleDialog("提示", "确认删除该项？", { text: "确认", onClick: () => {
           this.deleteTodo(index)
-        })
-        .catch(err=>{
-          promptAction.showToast({message: err})
-        })
+        } }, { text: "取消", onClick:()=>{} })
+        // .then(data=>{
+        //
+        //   this.deleteTodo(index)
+        // })
+        // .catch(err=>{
+        //   promptAction.showToast({message: err})
+        // })
 
-    })
+      })
   }
 
   build() {
     Column() {
 
       Refresh({ refreshing: $$this.isRefreshing, offset: 120, friction: 100 }) {
-        List({space : 20}) {
+        List({ space: 20 }) {
           ForEach(this.todoList, (item: TodoItem, index) => {
             ListItem() {
               Row() {
@@ -88,10 +87,10 @@ export default struct ListPage {
 
                 Text(item.title)
               }.width('100%')
-            }.onClick(ev=>{
+            }.onClick(ev => {
               this.selectItem = this.todoList[index]
               this.dialogController.open()
-            }).swipeAction({ end: this.itemEnd.bind(this, index)})
+            }).swipeAction({ end: this.itemEnd.bind(this, index) })
           })
         }.width('100%')
         .height('100%')
@@ -104,17 +103,15 @@ export default struct ListPage {
         this.getData()
       })
 
-
     }.width('100%')
   }
 
-  deleteTodo(index){
+  deleteTodo(index) {
 
     post(`lg/todo/delete/${this.todoList[index].id}/json`, {})
-      .then(data=>{
-        promptAction.showToast({ message : "删除成功" })
+      .then(data => {
+        promptAction.showToast({ message: "删除成功" })
         this.todoList.splice(index, 1);
       })
   }
-
 }

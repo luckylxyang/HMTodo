@@ -1,6 +1,5 @@
 
 import TodoItem from '../entity/TodoItem'
-import { httpPost, httpPostPromise } from '../utils/HttpUtil'
 const Repo = {
 
   getTodoList(){
@@ -16,6 +15,6 @@ const Repo = {
   },
 
   deleteTodo(todoId: number){
-    return httpPostPromise(`lg/todo/done/${todoId}/json`)
+
   }
 }

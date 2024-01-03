@@ -2,8 +2,6 @@ import promptAction from '@ohos.promptAction'
 import TodoItem from '../entity/TodoItem'
 import { post, postForm } from '../http/HttpUtils'
 import { dateFormat } from '../utils/CommonUtils'
-import { httpPost, httpPostFormPromise, httpPostPromise } from '../utils/HttpUtil'
-import PermissionUtil from '../utils/PermissionUtil'
 import Reminder from '../utils/ReminderAgentUtil'
 
 @Preview
